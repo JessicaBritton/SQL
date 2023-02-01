@@ -21,7 +21,7 @@ INSERT INTO Groceries VALUES (15, "English Muffins", "Thomas", 3.72, 7, 77);
 --Display the database ordered by price.
 SELECT * FROM Groceries ORDER BY price asc;
 
---What is the average price of items in the aisles 30 and above?
+--What is the average price of items in aisle 7?
 SELECT AVG(price) "avg aisle 7 price" FROM Groceries WHERE aisle='7';
 
 --What are the most 5 popular items?
