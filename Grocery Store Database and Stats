@@ -1,0 +1,28 @@
+--Create a Grocery Store Database.
+
+CREATE TABLE Groceries (id INTEGER PRIMARY KEY, name TEXT, brand TEXT, price INTEGER, aisle INTEGER, popularity INTEGER);
+
+INSERT INTO Groceries VALUES (1, "Peach Yogurt", "The Greek Gods", 5.18, 29, 95);
+INSERT INTO Groceries VALUES (2, "Granola", "Nature Valley", 4.38, 17, 75);
+INSERT INTO Groceries VALUES (3, "Blueberries", "Driscoll's", 2.98, 34, 90);
+INSERT INTO Groceries VALUES (4, "Dark Chocolate Chips", "Nestle", 4.78, 14, 100);
+INSERT INTO Groceries VALUES (5, "White Chocolate Chips", "Nestle", 4.78, 14, 70);
+INSERT INTO Groceries VALUES (6, "Kettle Corn", "Orville Redenbacher's", 6.36, 21, 80);
+INSERT INTO Groceries VALUES (7, "Everything Deluxe Bagel", "Sara Lee", 2.78, 7, 100);
+INSERT INTO Groceries VALUES (8, "Strawberry Cream Cheese", "Philadelphia", 7.63, 29, 88);
+INSERT INTO Groceries VALUES (9, "Chicken Apple Sausage", "Aidells", 5.92, 30, 85);
+INSERT INTO Groceries VALUES (10, "Applewood Thick Cut Bacon", "Wright", 9.98, 31, 84);
+INSERT INTO Groceries VALUES (11, "Parmesan Cheese Wedge", "BelGioioso", 5.14, 34, 98);
+INSERT INTO Groceries VALUES (12, "Fresh Stacks-The Original", "Ritz Crackers", 3.88, 19, 86);
+INSERT INTO Groceries VALUES (13, "Apricot Preserves", "Bonne Maman", 5.68, 16, 65);
+INSERT INTO Groceries VALUES (14, "Peanut Butter", "Jif", 2.76, 16, 91);
+INSERT INTO Groceries VALUES (15, "English Muffins", "Thomas", 3.72, 7, 77);
+
+--Display the database ordered by price.
+SELECT * FROM Groceries ORDER BY price asc;
+
+--What is the average price of items in the aisles 30 and above?
+SELECT AVG(price) "avg aisle 7 price" FROM Groceries WHERE aisle='7';
+
+--What are the most 5 popular items?
+SELECT name, price, popularity FROM Groceries ORDER BY popularity desc LIMIT 5;
