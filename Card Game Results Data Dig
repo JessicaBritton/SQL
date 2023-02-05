@@ -1,6 +1,19 @@
 #In this SQL code, I'm querying a database that's holding card game results to answer questions about the data. Database below.
 
---How many times was each game played?
+--Who are all the players and how many times have they played? 
+SELECT player_name, COUNT(player_name) AS 'Times_Played' 
+FROM card_games 
+GROUP BY player_name;
+
+--Which players have played over 13 times?
+SELECT player_name, COUNT(*) AS 'Times_Played' 
+FROM card_games 
+GROUP BY player_name 
+HAVING 'Times_Played' >= 13; 
+
+^^^NOT WORKING????
+
+--How many times were each game played?
 SELECT game_name, COUNT(*)
 FROM card_games
 GROUP BY game_name;
@@ -25,13 +38,20 @@ SELECT game_name, ROUND(AVG(score)) AS 'AVG_Score'
 FROM card_games
 GROUP BY game_name;
 
+--Which Players got the highest/max Score in each game?
+SELECT game_name, player_name, MAX(score) AS 'Max_Score'
+FROM card_games
+GROUP BY game_name
+HAVING 'Max_Score'='Max_Score';
+
 --Which players had a score above average in Rummy?
 SELECT game_name, player_name, score
 FROM card_games
 WHERE game_name = 'Rummy' AND score > 413
+GROUP BY player_name
 ORDER BY score desc;
 
---How many scores were high, average, low, and poor? (using CASE)
+--How many scores were high, average, low, and poor in Rummy? (using CASE)
 SELECT COUNT(*),
     CASE
         WHEN score > 520 THEN 'High Score'
@@ -42,7 +62,6 @@ SELECT COUNT(*),
 FROM card_games
 WHERE game_name ='Rummy'
 GROUP BY "Game_Scoring";
-
 
 
 /*  Friendly Card Game Results:
