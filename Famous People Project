@@ -1,0 +1,30 @@
+CREATE TABLE Famous_People 
+    (id INTEGER PRIMARY KEY AUTOINCREMENT, 
+    fullname TEXT,
+    birthdate TEXT);
+    
+INSERT INTO Famous_People (fullname, birthdate) VALUES ("Vin Diesel", "1967-07-18");
+INSERT INTO Famous_People (fullname, birthdate) VALUES ("Tom Hanks", "1956-07-09");
+INSERT INTO Famous_People (fullname, birthdate) VALUES ("Sandra Bullock", "1964-07-26");
+INSERT INTO Famous_People (fullname, birthdate) VALUES ("Michelle Rodriguez", "1978-07-12");
+INSERT INTO Famous_People (fullname, birthdate) VALUES ("Jason Statham", "1967-07-26");
+INSERT INTO Famous_People (fullname, birthdate) VALUES ("Robin Wright", "1966-04-08");
+INSERT INTO Famous_People (fullname, birthdate) VALUES ("Nina Dobrev", "1989-01-09");
+INSERT INTO Famous_People (fullname, birthdate) VALUES ("John Krasinski", "1979-10-20");
+INSERT INTO Famous_People (fullname, birthdate) VALUES ("Emily Blunt", "1983-02-23");
+INSERT INTO Famous_People (fullname, birthdate) VALUES ("Jenna Fischer", "1974-03-07");
+INSERT INTO Famous_People (fullname, birthdate) VALUES ("Paul Wesley", "1982-07-23");
+INSERT INTO Famous_People (fullname, birthdate) VALUES ("Mila Kunis", "1983-08-14");
+INSERT INTO Famous_People (fullname, birthdate) VALUES ("Ashton Kutcher", "1978-02-07");
+INSERT INTO Famous_People (fullname, birthdate) VALUES ("Justin Timberlake", "1981-01-31");
+INSERT INTO Famous_People (fullname, birthdate) VALUES ("Natalie Portman", "1981-06-09");
+INSERT INTO Famous_People (fullname, birthdate) VALUES ("Blake Lively", "1987-08-25");
+INSERT INTO Famous_People (fullname, birthdate) VALUES ("Ryan Reynolds", "1976-10-23");
+INSERT INTO Famous_People (fullname, birthdate) VALUES ("Jimmy O. Yang", "1987-06-11");
+
+CREATE TABLE Movies
+    (id INTEGER PRIMARY KEY AUTOINCREMENT, 
+    fullname TEXT,
+    birthdate TEXT);
+
+SELECT * FROM Famous_People;
