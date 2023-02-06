@@ -36,7 +36,7 @@ INSERT INTO Movies (title, released, actor_id) VALUES ("The Fast and the Furious
 INSERT INTO Movies (title, released, actor_id) VALUES ("The Fast and the Furious", 2001, 4);
 INSERT INTO Movies (title, released, actor_id) VALUES ("Forrest Gump", 1994, 2); 
 INSERT INTO Movies (title, released, actor_id) VALUES ("Forrest Gump", 1994, 6); 
-
+INSERT INTO Movies (title, released, actor_id) VALUES ("Forrest Gump", 1994, 6); 
 
 CREATE TABLE Movie_Love_Interest 
     (id INTEGER PRIMARY KEY AUTOINCREMENT, 
@@ -46,6 +46,8 @@ CREATE TABLE Movie_Love_Interest
 
 INSERT INTO Movie_Love_Interest (movie_id, actor1_id, actor2_id)
     VALUES (1, 1, 4);
+
+SELECT * FROM Famous_People;
 
 SELECT Famous_People.fullname AS actor, Movies.title AS movie_title
 FROM Famous_People
@@ -60,4 +62,3 @@ FROM Movie_Love_Interest
     ON Movie_Love_Interest.actor2_id = b.id
     JOIN Movies
     ON Movie_Love_Interest.id = Movies.actor_id;
-
