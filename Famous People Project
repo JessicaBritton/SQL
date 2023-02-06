@@ -47,12 +47,12 @@ CREATE TABLE Movie_Love_Interest
 INSERT INTO Movie_Love_Interest (movie_id, actor1_id, actor2_id)
     VALUES (1, 1, 4);
 
-SELECT Famous_People.fullname, Movies.title
+SELECT Famous_People.fullname AS actor, Movies.title AS movie_title
 FROM Famous_People
     JOIN Movies
     ON Famous_People.id = Movies.actor_id;
 
-SELECT a.fullname AS love_interest_a, b.fullname AS love_interest_b, movies.title AS movie_name
+SELECT a.fullname AS love_interest_a, b.fullname AS love_interest_b, movies.title AS movie_title
 FROM Movie_Love_Interest
     JOIN Famous_People a
     ON Movie_Love_Interest.actor1_id = a.id
@@ -60,3 +60,4 @@ FROM Movie_Love_Interest
     ON Movie_Love_Interest.actor2_id = b.id
     JOIN Movies
     ON Movie_Love_Interest.id = Movies.actor_id;
+
