@@ -24,10 +24,39 @@ INSERT INTO Famous_People (fullname, birthdate) VALUES ("Blake Lively", "1987-08
 INSERT INTO Famous_People (fullname, birthdate) VALUES ("Ryan Reynolds", "1976-10-23");
 INSERT INTO Famous_People (fullname, birthdate) VALUES ("Jimmy O. Yang", "1987-06-11");
 
+
+
 CREATE TABLE Movies
     (id INTEGER PRIMARY KEY AUTOINCREMENT, 
     title TEXT,
     released INTEGER, 
     actor_id INTEGER);
 
-INSERT INTO Movies (title, released, actor_id) VALUES ("The Fast and the Furious", 2001, 1 & 4);
+INSERT INTO Movies (title, released, actor_id) VALUES ("The Fast and the Furious", 2001, 1);
+INSERT INTO Movies (title, released, actor_id) VALUES ("The Fast and the Furious", 2001, 4);
+
+
+
+CREATE TABLE Movie_Love_Interest 
+    (id INTEGER PRIMARY KEY AUTOINCREMENT, 
+    movie_id INTEGER, 
+    actor1_id INTEGER, 
+    actor2_id INTEGER);
+
+INSERT INTO Movie_Love_Interest (movie_id, actor1_id, actor2_id)
+    VALUES (1, 1, 4);
+
+SELECT Famous_People.fullname, Movies.title
+FROM Famous_People
+    JOIN Movies
+    ON Famous_People.id = Movies.actor_id;
+
+SELECT a.fullname, b.fullname, movies.title
+FROM Movie_Love_Interest
+    JOIN Famous_People a
+    ON Movie_Love_Interest.actor1_id = a.id
+    JOIN Famous_People b
+    ON Movie_Love_Interest.actor2_id = b.id
+    JOIN Movies
+    ON Movie_Love_Interest.id = Movies.actor_id;
+
