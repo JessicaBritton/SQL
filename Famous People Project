@@ -15,7 +15,6 @@ INSERT INTO Famous_People (fullname, birthdate) VALUES ("Nina Dobrev", "1989-01-
 INSERT INTO Famous_People (fullname, birthdate) VALUES ("John Krasinski", "1979-10-20");
 INSERT INTO Famous_People (fullname, birthdate) VALUES ("Emily Blunt", "1983-02-23");
 INSERT INTO Famous_People (fullname, birthdate) VALUES ("Jenna Fischer", "1974-03-07");
-INSERT INTO Famous_People (fullname, birthdate) VALUES ("Paul Wesley", "1982-07-23");
 INSERT INTO Famous_People (fullname, birthdate) VALUES ("Mila Kunis", "1983-08-14");
 INSERT INTO Famous_People (fullname, birthdate) VALUES ("Ashton Kutcher", "1978-02-07");
 INSERT INTO Famous_People (fullname, birthdate) VALUES ("Justin Timberlake", "1981-01-31");
@@ -36,7 +35,22 @@ INSERT INTO Movies (title, released, actor_id) VALUES ("The Fast and the Furious
 INSERT INTO Movies (title, released, actor_id) VALUES ("The Fast and the Furious", 2001, 4);
 INSERT INTO Movies (title, released, actor_id) VALUES ("Forrest Gump", 1994, 2); 
 INSERT INTO Movies (title, released, actor_id) VALUES ("Forrest Gump", 1994, 6); 
-INSERT INTO Movies (title, released, actor_id) VALUES ("Forrest Gump", 1994, 6); 
+INSERT INTO Movies (title, released, actor_id) VALUES ("The Heat", 2013, 3);
+INSERT INTO Movies (title, released, actor_id) VALUES ("Resident Evil", 2002, 4);
+INSERT INTO Movies (title, released, actor_id) VALUES ("Death Race", 2008, 5);
+INSERT INTO Movies (title, released, actor_id) VALUES ("The Princess Bride", 1987, 6);
+INSERT INTO Movies (title, released, actor_id) VALUES ("XXX: Return of Xander Cage", 2017, 7);
+INSERT INTO Movies (title, released, actor_id) VALUES ("A Quiet Place", 2018, 8);
+INSERT INTO Movies (title, released, actor_id) VALUES ("A Quiet Place", 2018, 9);
+INSERT INTO Movies (title, released, actor_id) VALUES ("Hall Pass", 2011, 10);
+INSERT INTO Movies (title, released, actor_id) VALUES ("Friends with Benefits", 2011, 11);
+INSERT INTO Movies (title, released, actor_id) VALUES ("Friends with Benefits", 2011, 13);
+INSERT INTO Movies (title, released, actor_id) VALUES ("No Strings Attached", 2011, 12);
+INSERT INTO Movies (title, released, actor_id) VALUES ("No Strings Attached", 2011, 14);
+INSERT INTO Movies (title, released, actor_id) VALUES ("The Sisterhood of the Traveling Pants", 2005, 15);
+INSERT INTO Movies (title, released, actor_id) VALUES ("Deadpool", 2016, 16);
+INSERT INTO Movies (title, released, actor_id) VALUES ("Love Hard", 2021, 17);
+INSERT INTO Movies (title, released, actor_id) VALUES ("Love Hard", 2021, 7);
 
 CREATE TABLE Movie_Love_Interest 
     (id INTEGER PRIMARY KEY AUTOINCREMENT, 
@@ -46,8 +60,20 @@ CREATE TABLE Movie_Love_Interest
 
 INSERT INTO Movie_Love_Interest (movie_id, actor1_id, actor2_id)
     VALUES (1, 1, 4);
+INSERT INTO Movie_Love_Interest (movie_id, actor1_id, actor2_id)
+    VALUES (3, 2, 6);
+INSERT INTO Movie_Love_Interest (movie_id, actor1_id, actor2_id)
+    VALUES (10, 8, 9);
+INSERT INTO Movie_Love_Interest (movie_id, actor1_id, actor2_id)
+    VALUES (13, 11, 13);
+INSERT INTO Movie_Love_Interest (movie_id, actor1_id, actor2_id)
+    VALUES (15, 12, 14);
+INSERT INTO Movie_Love_Interest (movie_id, actor1_id, actor2_id)
+    VALUES (19, 17, 7);
 
 SELECT * FROM Famous_People;
+
+SELECT * FROM Movies;
 
 SELECT Famous_People.fullname AS actor, Movies.title AS movie_title
 FROM Famous_People
@@ -61,4 +87,5 @@ FROM Movie_Love_Interest
     JOIN Famous_People b
     ON Movie_Love_Interest.actor2_id = b.id
     JOIN Movies
-    ON Movie_Love_Interest.id = Movies.actor_id;
+    ON Movie_Love_Interest.id = Movies.actor_id
+    Group BY love_interest_a;
