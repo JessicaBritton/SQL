@@ -87,5 +87,5 @@ FROM Movie_Love_Interest
     JOIN Famous_People b
     ON Movie_Love_Interest.actor2_id = b.id
     JOIN Movies
-    ON Movie_Love_Interest.id = Movies.actor_id
+    ON Movie_Love_Interest.actor1_id = Movies.actor_id
     GROUP By a.id;
