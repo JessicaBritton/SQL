@@ -13,6 +13,13 @@ HAVING 'Times_Played' >= 13;
 
 ^^^NOT WORKING????
 
+SELECT player_name, COUNT(player_name) AS 'Times_Played'
+FROM card_games
+WHERE 'Times_Played >=13
+GROUP BY player_name;
+
+Maybe this one?^^^
+
 --How many times were each game played?
 SELECT game_name, COUNT(*)
 FROM card_games
