@@ -1,4 +1,4 @@
-For this Project, I created three tables that were related to each other. 
+For this Project, I created a database with three tables that were related to each other. 
 The first table had to be a small set of "Famous People", and the other 
 tables were things that they do or were related to them in someway. 
 I then came up with SQL code to query the data and answer questions about the data.
