@@ -1,0 +1,16 @@
+--For this project, I downloaded data from Kaggle on Amazon's Top 50 Bestselling Books 2009-2019. 
+--I then created a table to store the data and inserted a few example rows of what this data looks like. I am not inputting all of the data, just a few rows for this project specifically. 
+--Then I used an UPDATE to emulate what happens when you edit data in the app. As well as a DELETE to emulate what happens when you delete data in the app.
+
+--Creating the table: 
+
+CREATE TABLE Top50Books_2009_2019 (
+id INTEGER PRIMARY KEY, 
+name TEXT, 
+author TEXT, 
+user_rating INTEGER, 
+reviews INTEGER, 
+price INTEGER, 
+year INTEGER, 
+genre TEXT);
+
