@@ -1,29 +1,29 @@
 #In this SQL code, I'm querying a database that's holding card game results to answer questions about the data. Database below.
 
---Who are all the players and how many times have they played? 
+--#1. Who are all the players and how many times have they played? 
 SELECT player_name, COUNT(player_name) AS 'Times_Played' 
 FROM card_games 
 GROUP BY player_name;
 
---Which players have played over 13 times?
+--#2. Which players have played over 13 times?
 SELECT player_name, COUNT(*) AS 'Times_Played' 
 FROM card_games 
 GROUP BY player_name 
 HAVING COUNT(*) >= 13; 
 
---How many times were each game played?
+--#3. How many times were each game played?
 SELECT game_name, COUNT(*)
 FROM card_games
 GROUP BY game_name;
 
---What are average, max, and min score values in the data?
+--#4. What are average, max, and min score values in the data?
 SELECT MAX(score) AS 'Max_Score' FROM card_games;
 
 SELECT MIN(score) AS 'Min_Score' FROM card_games;
 
 SELECT AVG(score) AS 'AVG_Score' FROM card_games;
 
---What are average, max, and min score values in the data by game?
+--#5. What are average, max, and min score values in the data by game?
 SELECT game_name, MAX(score) AS 'Max_Score'
 FROM card_games
 GROUP BY game_name;
@@ -36,20 +36,20 @@ SELECT game_name, ROUND(AVG(score)) AS 'AVG_Score'
 FROM card_games
 GROUP BY game_name;
 
---Which Players got the highest/max Score in each game?
+--#6. Which Players got the highest/max Score in each game?
 SELECT game_name, player_name, MAX(score) AS 'Max_Score'
 FROM card_games
 GROUP BY game_name
 HAVING 'Max_Score'='Max_Score';
 
---Which players had a score above average in Rummy?
+--#7. Which players had a score above average in Rummy?
 SELECT game_name, player_name, score
 FROM card_games
 WHERE game_name = 'Rummy' AND score > 413
 GROUP BY player_name
 ORDER BY score desc;
 
---How many scores were high, average, low, and poor in Rummy? (using CASE)
+--#8. How many scores were high, average, low, and poor in Rummy? (using CASE)
 SELECT COUNT(*),
     CASE
         WHEN score > 520 THEN 'High Score'
@@ -61,7 +61,7 @@ FROM card_games
 WHERE game_name ='Rummy'
 GROUP BY "Game_Scoring";
 
-
+--Below in the description on the data, the table creation, and the data itself. 
 /*  Friendly Card Game Results:
 During this past winter, a few friends got together every Wednesday night for a friendly game of cards.  
 On some nights they'd play two games, but never the same game twice on the same night.  
