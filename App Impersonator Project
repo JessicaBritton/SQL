@@ -1,7 +1,7 @@
-For this project, I downloaded data from Kaggle on Amazon's Top 50 Bestselling Books 2009-2019. 
+/*For this project, I downloaded data from Kaggle on Amazon's Top 50 Bestselling Books 2009-2019. 
 I then created a table to store the data and inserted a few example rows of what this data looks like. 
 I am not inputting all of the data, just a few rows for this project specifically. 
-Then I used an UPDATE to emulate what happens when you edit data in the app. As well as a DELETE to emulate what happens when you delete data in the app.
+Then I used an UPDATE to emulate what happens when you edit data in the app. As well as a DELETE to emulate what happens when you delete data in the app.*/
 
 --Creating the table: 
 
@@ -29,6 +29,7 @@ INSERT INTO Top50Books_2009_2019 (name, author, user_rating, reviews, price, yea
 INSERT INTO Top50Books_2009_2019 (name, author, user_rating, reviews, price, year, genre) VALUES ('Percy Jackson and the Olympians Paperback Boxed Set (Books 1-3)', 'Rick Riordan', 4.8, 548, 2, 2010, ' Fiction');
 
 --Description on the data set:
+/*
 Name: Name of the book
 Author: The auhor of the book
 User Rating: Amazon User Rating
@@ -36,9 +37,29 @@ Reviews: Number of written reviews on amazon
 Price: The price of the book (as at 13/10/2020)
 Year: The year(s) it ranked on the bestseller
 Genre: Whether fiction or non-fiction
+Publication Date: date of publication in month/day/year
+*/
 
---Using UPDATE to what happens when you edit data in the app:
+--Using UPDATE to what happens when you edit data in the app: (first I altered the table to add a publication date column, then I updated the rows):
 
+ALTER TABLE Top50Books_2009_2019 ADD publication_date INTEGER;
+
+UPDATE Top50Books_2009_2019 SET publication_date = '08/14/2012'
+WHERE id = 1;
+UPDATE Top50Books_2009_2019 SET publication_date = '07/12/2011'
+WHERE id = 2;
+UPDATE Top50Books_2009_2019 SET publication_date = '01/01/1962'
+WHERE id = 3;
+UPDATE Top50Books_2009_2019 SET publication_date = '03/01/2009'
+WHERE id = 4;
+UPDATE Top50Books_2009_2019 SET publication_date = '10/22/2013'
+WHERE id = 5;
+UPDATE Top50Books_2009_2019 SET publication_date = '01/02/2012'
+WHERE id = 6;
+UPDATE Top50Books_2009_2019 SET publication_date = '04/24/2018'
+WHERE id = 8;
+UPDATE Top50Books_2009_2019 SET publication_date = '01/22/1990'
+WHERE id = 9;
 
 --Using DELETE to emulate what happens when you delete data in the app.
 
