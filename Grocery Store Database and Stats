@@ -1,6 +1,12 @@
 --Create a Grocery Store Database.
 
-CREATE TABLE Groceries (id INTEGER PRIMARY KEY, name TEXT, brand TEXT, price INTEGER, aisle INTEGER, popularity INTEGER);
+CREATE TABLE Groceries (
+id INTEGER PRIMARY KEY, 
+name TEXT, 
+brand TEXT, 
+price INTEGER, 
+aisle INTEGER, 
+popularity INTEGER);
 
 INSERT INTO Groceries VALUES (1, "Peach Yogurt", "The Greek Gods", 5.18, 29, 95);
 INSERT INTO Groceries VALUES (2, "Granola", "Nature Valley", 4.38, 17, 75);
