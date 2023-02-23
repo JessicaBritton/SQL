@@ -62,4 +62,4 @@ UPDATE Top50Books_2009_2019 SET publication_date = '01/22/1990'
 WHERE id = 9;
 
 --Using DELETE to emulate what happens when you delete data in the app.
-
+DELETE FROM Top50Books_2009_2019 WHERE id = 10;
