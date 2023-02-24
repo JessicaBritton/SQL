@@ -111,6 +111,17 @@ JOIN chinook.genres gen
 ON track.GenreId = gen.GenreId;
 
 --#13. Show the total sales made by each sales agent.
+SELECT empl.FirstName, 
+empl.LastName, 
+ROUND(SUM(inv.total), 2) As 'Total Sales'
+FROM chinook.invoices inv
+JOIN chinook.customers cust
+ON inv.CustomerId = cust.CustomerId
+JOIN chinook.employees empl
+ON cust.SupportRepId = empl.EmployeeId
+WHERE empl.Title = 'Sales Support Agent'
+GROUP BY EmployeeID;
+
 --#14. Which sales agent made the most dollars in sales in 2009?
 
 --#15. Show all the customers whose support representative is Jane Peacock. Include customer full name, country, and email.
