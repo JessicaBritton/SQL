@@ -138,7 +138,10 @@ ORDER BY ROUND(SUM(inv.total), 2) desc
 LIMIT 1;
 
 --#15. Show all the customers whose support representative is Jane Peacock. Include customer full name, country, and email.
- SELECT cust.FirstName, cust.LastName, cust.Country, cust.Email
+ SELECT cust.FirstName, 
+ cust.LastName, 
+ cust.Country, 
+ cust.Email
  FROM chinook.customers cust
  LEFT JOIN chinook.employees empl
  ON cust.SupportRepId = empl.EmployeeId
