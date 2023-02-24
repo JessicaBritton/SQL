@@ -124,3 +124,6 @@ ON track.GenreId = gen.GenreId;
 SELECT * FROM chinook.invoices
 WHERE BillingCountry = 'France'
 AND Total > 5.00;
+
+--#17.  Find a unique/distinct list of artists from the artists table.
+SELECT distinct name FROM chinook.artists;
