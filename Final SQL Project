@@ -67,7 +67,6 @@ SELECT COUNT(*)
 FROM chinook.Invoices
 WHERE InvoiceDate BETWEEN '2009-01-01' AND '2009-12-31';
 
-
 --#9. What are the total sales for 2009?
 --#10. Write a query that includes the purchased track name with each invoice line ID.
 --#11. Write a query that includes the purchased track name AND artist name with each invoice line ID.
