@@ -86,8 +86,8 @@ JOIN chinook.tracks track
 ON InvItm.TrackId = track.TrackId;
 
 --#11. Write a query that includes the purchased track name AND artist name with each invoice line ID.
-SELECT art.name AS 'Artist_Name', 
-track.name AS 'Track_Name', 
+SELECT art.name AS 'Artist Name', 
+track.name AS 'Track Name', 
 InvoiceLineId
 FROM chinook.invoice_items InvItm
 JOIN chinook.tracks track
@@ -98,6 +98,18 @@ JOIN chinook.artists art
 ON alb.ArtistId = art.ArtistId;
 
 --#12. Provide a query that shows all the Tracks, and include the Album name, Media type, and Genre.
+SELECT track.name AS 'Track Name', 
+alb.Title AS 'Album Title', 
+med.Name AS 'Media Type', 
+gen.Name AS 'Genre'
+FROM chinook.tracks track
+JOIN chinook.albums alb
+ON track.AlbumId = alb.AlbumId
+JOIN chinook.media_types med
+ON track.MediaTypeId = med.MediaTypeId
+JOIN chinook.genres gen
+ON track.GenreId = gen.GenreId;
+
 --#13. Show the total sales made by each sales agent.
 --#14. Which sales agent made the most dollars in sales in 2009?
 
