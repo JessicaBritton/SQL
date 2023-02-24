@@ -123,6 +123,19 @@ WHERE empl.Title = 'Sales Support Agent'
 GROUP BY EmployeeID;
 
 --#14. Which sales agent made the most dollars in sales in 2009?
+SELECT empl.FirstName, 
+empl.LastName, 
+ROUND(SUM(inv.total), 2) As 'Total Sales'
+FROM chinook.invoices inv
+JOIN chinook.customers cust
+ON inv.CustomerId = cust.CustomerId
+JOIN chinook.employees empl
+ON cust.SupportRepId = empl.EmployeeId
+WHERE empl.Title = 'Sales Support Agent'
+AND inv.InvoiceDate LIKE '2009%'
+GROUP BY EmployeeID
+ORDER BY ROUND(SUM(inv.total), 2) desc
+LIMIT 1;
 
 --#15. Show all the customers whose support representative is Jane Peacock. Include customer full name, country, and email.
  SELECT cust.FirstName, cust.LastName, cust.Country, cust.Email
