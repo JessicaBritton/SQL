@@ -152,5 +152,27 @@ SELECT * FROM chinook.invoices
 WHERE BillingCountry = 'France'
 AND Total > 5.00;
 
---#17.  Find a unique/distinct list of artists from the artists table.
+--#17. What are the different Media Types?
+SELECT distinct name
+FROM chinook.media_types;
+
+--#18.  Find a unique/distinct list of artists from the artists table.
 SELECT distinct name FROM chinook.artists;
+
+--#19. How many albums does AC/DC have?
+SELECT art.Name AS 'Artist Name', 
+COUNT(alb.Title) AS 'NumberOf_Albums'
+FROM chinook.artists art
+JOIN chinook.albums alb
+ON art.ArtistId = alb.ArtistId
+WHERE art.Name = 'AC/DC';
+
+--#20. Who are the top 5 artists with the most albums?
+SELECT art.Name AS 'Artist Name', 
+COUNT(alb.Title) AS 'NumberOf_Albums'
+FROM chinook.artists art
+JOIN chinook.albums alb
+ON art.ArtistId = alb.ArtistId
+GROUP BY art.Name
+ORDER BY NumberOf_Albums desc
+LIMIT 5;
