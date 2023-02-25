@@ -176,3 +176,11 @@ ON art.ArtistId = alb.ArtistId
 GROUP BY art.Name
 ORDER BY NumberOf_Albums desc
 LIMIT 5;
+
+--#21. What are the names of AC/DC's albums?
+SELECT art.Name AS 'Artist Name', 
+alb.Title
+FROM chinook.artists art
+JOIN chinook.albums alb
+ON art.ArtistId = alb.ArtistId
+WHERE art.Name = 'AC/DC';
