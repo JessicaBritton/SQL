@@ -1,8 +1,8 @@
---For this project, I downloaded Spotify data on the top 50 songs in 2021 from Kaggle.
---I created a table in SQLite Studio to insert the Spotify data into.
---Then I inserted the Spotify Data .csv into the table.
---I explored the data and used SQL to answer some questions I had.
---At the bottom is also a description of the 14 variables about the songs.
+/*For this project, I downloaded Spotify data on the top 50 songs in 2021 from Kaggle.
+I created a table in SQLite Studio to insert the Spotify data into.
+Then I inserted the Spotify Data .csv into the table.
+I explored the data and used SQL to answer some questions I had.
+At the bottom is also a description of the 14 variables about the songs.*/
 
 --Here is the table:
 
