@@ -1,6 +1,123 @@
 Climate Conference Project
 Database: https://www.db-fiddle.com/f/pxMci1sLL945KHKYvpe9W6/1
-#This analysis utilized the following Climate Conference dataset:
+
+-- Analysis:
+
+-- 1. [LEFT JOIN] List all the VIPs (last and first name) and any panels they are presenting at. 
+SELECT
+	VIPS.LAST_NAME,
+    VIPS.FIRST_NAME,
+    EVENTS.EVENT_ID
+FROM
+	VIPS
+LEFT JOIN 
+	EVENTS
+	ON VIPS.EVENT = EVENTS.EVENT_ID;
+
+-- 2. [INNER JOIN] Which VIPs are presenting at events? Include the VIPs first and last name, the event name, and what type of event it is.
+SELECT
+	VIPS.FIRST_NAME,
+    VIPS.LAST_NAME,
+    EVENTS.EVENT_NAME,
+    EVENTS.EVENT_TYPE
+FROM VIPS
+INNER JOIN
+	EVENTS
+    ON VIPS.EVENT = EVENTS.EVENT_ID;
+
+-- 3. [Multiple JOINs in one query] List all the VIPs and their hotel reservations. Include the VIPs first and last name, hotel name, and address.
+SELECT
+	VIPS.FIRST_NAME,
+    VIPS.LAST_NAME,
+    HOTELS.HOTEL_NAME,
+    HOTELS.ADDRESS
+FROM
+	VIPS
+LEFT JOIN
+	RESERVATIONS
+    ON VIPS.MEMBER_ID = RESERVATIONS.MEMBER_ID
+LEFT JOIN
+	HOTELS
+    ON RESERVATIONS.HOTEL = HOTELS.HOTEL_ID;
+
+-- 4. [Query with a subquery] Find VIPs staying at the hotel with the most reservations.
+SELECT 
+	V.FIRST_NAME,
+    V.LAST_NAME,
+    H.HOTEL_NAME
+FROM
+	VIPS AS V
+JOIN
+	RESERVATIONS AS R
+    ON V.MEMBER_ID = R.MEMBER_ID
+JOIN 
+	HOTELS AS H
+    ON R.HOTEL = H.HOTEL_ID
+WHERE
+	R.HOTEL = (
+      SELECT
+      	HOTEL
+      FROM
+      	RESERVATIONS
+      GROUP BY
+      	HOTEL
+      ORDER BY COUNT(*) DESC
+      LIMIT 1);
+
+-- 5. [Query with a SELF JOIN] Find VIPs who provide feedback to others and the corresponding VIPs who receive their feedback.
+SELECT
+	V1.FIRST_NAME AS FEEDBACK_GIVER,
+    V1.LAST_NAME AS GIVER_LAST,
+    V2.FIRST_NAME AS FEEDBACK_RECEIVER,
+    V2.LAST_NAME AS RECEIVER_LAST
+FROM VIPS AS V1
+JOIN
+	VIPS AS V2
+    ON V1.PROVIDES_FEEDBACK_TO = V2.MEMBER_ID;
+
+-- 6. Custom Query: List all the VIPS and if they have RSVP'd to the welcome or dinner reservations.
+SELECT
+	V.FIRST_NAME,
+    V.LAST_NAME,
+    R.WELCOME_RSVP,
+    R.DINNER_RSVP
+FROM 
+	VIPS AS V
+LEFT JOIN
+	RESERVATIONS AS R
+    ON V.MEMBER_ID = R.MEMBER_ID;
+
+-- 7. Custom Query: Get a list of all government-affiliated VIPs who have RSVP’d for dinner.
+SELECT
+	V.FIRST_NAME,
+    V.LAST_NAME,
+    V.ASSOCIATION
+FROM
+	VIPS AS V
+JOIN
+	RESERVATIONS AS R
+    ON V.MEMBER_ID = R.MEMBER_ID
+WHERE
+	V.ASSOC_TYPE = 'government'
+    AND
+    R.DINNER_RSVP = 1; 
+
+-- 8. Custom Query: Find the number of VIPs attending each event, ordered by event attendance.
+SELECT
+	E.EVENT_NAME,
+    COUNT(V.MEMBER_ID) AS ATTENDEE_COUNT
+FROM
+	EVENTS AS E
+LEFT JOIN
+	VIPS AS V
+    ON E.EVENT_ID = V.EVENT
+GROUP BY E.EVENT_NAME
+ORDER BY ATTENDEE_COUNT DESC;
+
+
+
+
+-- This analysis utilized the following Climate Conference dataset:
 
 CREATE TABLE vips (
      member_id INTEGER PRIMARY KEY
@@ -125,117 +242,3 @@ INSERT INTO hotels VALUES
  , (3, 'Four Season''s', '900 Winter Road, Cityville, PA')
  ;
 
-
-
-# Analysis:
-
--- 1. [LEFT JOIN] List all the VIPs (last and first name) and any panels they are presenting at. 
-SELECT
-	VIPS.LAST_NAME,
-    VIPS.FIRST_NAME,
-    EVENTS.EVENT_ID
-FROM
-	VIPS
-LEFT JOIN 
-	EVENTS
-	ON VIPS.EVENT = EVENTS.EVENT_ID;
-
--- 2. [INNER JOIN] Which VIPs are presenting at events? Include the VIPs first and last name, the event name, and what type of event it is.
-SELECT
-	VIPS.FIRST_NAME,
-    VIPS.LAST_NAME,
-    EVENTS.EVENT_NAME,
-    EVENTS.EVENT_TYPE
-FROM VIPS
-INNER JOIN
-	EVENTS
-    ON VIPS.EVENT = EVENTS.EVENT_ID;
-
--- 3. [Multiple JOINs in one query] List all the VIPs and their hotel reservations. Include the VIPs first and last name, hotel name, and address.
-SELECT
-	VIPS.FIRST_NAME,
-    VIPS.LAST_NAME,
-    HOTELS.HOTEL_NAME,
-    HOTELS.ADDRESS
-FROM
-	VIPS
-LEFT JOIN
-	RESERVATIONS
-    ON VIPS.MEMBER_ID = RESERVATIONS.MEMBER_ID
-LEFT JOIN
-	HOTELS
-    ON RESERVATIONS.HOTEL = HOTELS.HOTEL_ID;
-
--- 4. [Query with a subquery] Find VIPs staying at the hotel with the most reservations.
-SELECT 
-	V.FIRST_NAME,
-    V.LAST_NAME,
-    H.HOTEL_NAME
-FROM
-	VIPS AS V
-JOIN
-	RESERVATIONS AS R
-    ON V.MEMBER_ID = R.MEMBER_ID
-JOIN 
-	HOTELS AS H
-    ON R.HOTEL = H.HOTEL_ID
-WHERE
-	R.HOTEL = (
-      SELECT
-      	HOTEL
-      FROM
-      	RESERVATIONS
-      GROUP BY
-      	HOTEL
-      ORDER BY COUNT(*) DESC
-      LIMIT 1);
-
--- 5. [Query with a SELF JOIN] Find VIPs who provide feedback to others and the corresponding VIPs who receive their feedback.
-SELECT
-	V1.FIRST_NAME AS FEEDBACK_GIVER,
-    V1.LAST_NAME AS GIVER_LAST,
-    V2.FIRST_NAME AS FEEDBACK_RECEIVER,
-    V2.LAST_NAME AS RECEIVER_LAST
-FROM VIPS AS V1
-JOIN
-	VIPS AS V2
-    ON V1.PROVIDES_FEEDBACK_TO = V2.MEMBER_ID;
-
--- 6. Custom Query: List all the VIPS and if they have RSVP'd to the welcome or dinner reservations.
-SELECT
-	V.FIRST_NAME,
-    V.LAST_NAME,
-    R.WELCOME_RSVP,
-    R.DINNER_RSVP
-FROM 
-	VIPS AS V
-LEFT JOIN
-	RESERVATIONS AS R
-    ON V.MEMBER_ID = R.MEMBER_ID;
-
--- 7. Custom Query: Get a list of all government-affiliated VIPs who have RSVP’d for dinner.
-SELECT
-	V.FIRST_NAME,
-    V.LAST_NAME,
-    V.ASSOCIATION
-FROM
-	VIPS AS V
-JOIN
-	RESERVATIONS AS R
-    ON V.MEMBER_ID = R.MEMBER_ID
-WHERE
-	V.ASSOC_TYPE = 'government'
-    AND
-    R.DINNER_RSVP = 1; 
-
--- 8. Custom Query: Find the number of VIPs attending each event, ordered by event attendance.
-SELECT
-	E.EVENT_NAME,
-    COUNT(V.MEMBER_ID) AS ATTENDEE_COUNT
-FROM
-	EVENTS AS E
-LEFT JOIN
-	VIPS AS V
-    ON E.EVENT_ID = V.EVENT
-GROUP BY E.EVENT_NAME
-ORDER BY ATTENDEE_COUNT DESC;
