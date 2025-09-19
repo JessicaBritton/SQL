@@ -31,96 +31,174 @@ time_signature integer NOT NULL
 
 --Below are the questions, with the SQL used to get the results I was looking for:
 
---#1. Who are all the artists?
-SELECT artist_name
-FROM BIT_DB.Spotifydata
-GROUP by artist_name;
+-- 1. Who are all the artists?
+SELECT
+    ARTIST_NAME
+FROM
+    BIT_DB.SPOTIFYDATA
+GROUP BY
+    ARTIST_NAME;
+    
+-- 2. Who has the most songs in this top 50 and how many do they have? 
+SELECT
+    ARTIST_NAME,
+    COUNT(ARTIST_NAME) AS NUMBER_OF_SONGS
+FROM
+    BIT_DB.SPOTIFYDATA
+GROUP BY 
+    ARTIST_NAME
+HAVING
+    COUNT(ARTIST_NAME) = 
+    (SELECT 
+        MAX(SONG_COUNT) 
+    FROM (
+        SELECT 
+            ARTIST_NAME, 
+            COUNT(ARTIST_NAME) AS SONG_COUNT 
+        FROM 
+            BIT_DB.SPOTIFYDATA 
+        GROUP BY 
+            ARTIST_NAME));
 
---#2. Who has the most songs in this top 50 and how many do they have? 
---(I first didn't have LIMIT 2 and got all artist with how many songs they each have on the list and saw that there were two artists with the most songs. 
---So I limited it to 2 and those are the artists with the most. --Need to find how to get the proper subquery to eliminate the limit 2)
-SELECT artist_name, 
-COUNT(artist_name) AS NumberOfSongs
-FROM BIT_DB.Spotifydata
-GROUP BY artist_name
-Order by NumberOfSongs desc
-LIMIT 2;
+-- OR AS A CTE:
+    
+WITH
+    COUNT_ARTIST AS (
+    SELECT 
+        ARTIST_NAME, 
+        COUNT(ARTIST_NAME) AS SONG_COUNT 
+    FROM 
+        SPOTIFYDATA
+    GROUP BY 
+        ARTIST_NAME
+    ),
+   
+MAX_COUNT AS (
+   SELECT
+       MAX(SONG_COUNT) AS MAX_SONGS
+   FROM
+       COUNT_ARTIST
+   )
 
---#3. What are the names of Olivia Rodrigo's songs?
-SELECT track_name AS OliviaRodrigo_Songs
-FROM BIT_DB.Spotifydata
-WHERE artist_name = 'Olivia Rodrigo';
+SELECT
+    CA.ARTIST_NAME,
+    CA.SONG_COUNT
+FROM
+    COUNT_ARTIST AS CA
+JOIN
+    MAX_COUNT AS MC
+    ON CA.SONG_COUNT = MC.MAX_SONGS;
 
---#4. What are the names of Doja Cat's songs?
-SELECT track_name AS DojaCat_Songs
-FROM BIT_DB.Spotifydata
-WHERE artist_name = 'Doja Cat';
+-- 3.. What are the names of Olivia Rodrigo's songs?
+SELECT
+    TRACK_NAME AS OLIVIA_RODRIGO_SONGS
+FROM
+    BIT_DB.SPOTIFYDATA
+WHERE
+    ARTIST_NAME = 'Olivia Rodrigo';
 
---#5. What is the AVG Popularity?
-SELECT AVG(popularity)
-FROM BIT_DB.Spotifydata;
+-- 4. What are the names of Doja Cat's songs?
+SELECT
+    TRACK_NAME AS DOJA_CAT_SONGS
+FROM
+    BIT_DB.SPOTIFYDATA
+WHERE
+    ARTIST_NAME = 'Doja Cat';
 
---#6. How many songs have a high, average, below average, and low popularity within this top 50?
-SELECT COUNT(*),
+-- 5. What is the AVG Popularity?
+SELECT
+    AVG(POPULARITY) AS AVERAGE_POPULARITY
+FROM
+    BIT_DB.SPOTIFYDATA;
+
+-- 6. How many songs have a high, average, below average, and low popularity within this top 50?
+SELECT
+    COUNT(*) AS NUMBER_OF_SONGS,
     CASE
-     WHEN popularity > 90 THEN 'Highly Popular'
-     WHEN popularity > 80 THEN 'Average Popularity'
-     WHEN popularity > 70 THEN 'Below Average Popularity'
-    ELSE 'Low Popularity'
-END AS 'Popularity_Rating'
-FROM BIT_DB.Spotifydata
-GROUP BY "Popularity_Rating"
-ORDER BY COUNT(*) desc;
+        WHEN POPULARITY >= 90 THEN 'Highly Popular'
+        WHEN POPULARITY >= 80 THEN 'Average Popularity'
+        WHEN POPULARITY >= 70 THEN 'Below Average Popularity'
+        ELSE 'Low Popularity'
+    END AS 'Popularity Rating'
+FROM
+    BIT_DB.SPOTIFYDATA
+GROUP BY
+    "Popularity Rating"
+ORDER BY 
+    COUNT(*) DESC;
 
---#7. Who are the top 10 artists by popularity?
-SELECT artist_name, 
-track_name, 
-popularity
-FROM BIT_DB.spotifydata
-ORDER BY popularity desc
+-- 7. Who are the top 10 artists by popularity?
+SELECT
+    ARTIST_NAME AS ARTIST,
+    TRACK_NAME AS TRACK,
+    POPULARITY
+FROM
+    BIT_DB.SPOTIFYDATA
+ORDER BY   
+    POPULARITY DESC
 LIMIT 10;
 
---#8. Is there a relaionship between popularity and song key? energy? tempo? speechiness? instrumentalness?
-SELECT artist_name, 
-track_name, 
-popularity, 
-song_key, 
-energy, 
-tempo, 
-speechiness, 
-instrumentalness
-FROM BIT_DB.Spotifydata
-ORDER BY Popularity desc
+-- 8. Is there a relaionship between popularity and song key? energy? tempo? speechiness? instrumentalness?
+SELECT
+    ARTIST_NAME,
+    TRACK_NAME,
+    POPULARITY,
+    SONG_KEY,
+    ENERGY,
+    TEMPO,
+    SPEECHINESS,
+    INSTRUMENTALNESS
+FROM
+    BIT_DB.SPOTIFYDATA
+ORDER BY
+    POPULARITY DESC
 LIMIT 10;
 
---#9. What's the average danceability for the 10 most popular songs?
-SELECT AVG(danceability) AS AVG_Danceability_TOP10
-FROM BIT_DB.spotifydata
-ORDER BY popularity desc
-LIMIT 10;
+-- 9. What's the average danceability for the 10 most popular songs?
+SELECT
+    AVG(DANCEABILITY) AS AVG_DANCEABILITY_FOR_TOP_10_TRACKS
+FROM (
+    SELECT
+        DANCEABILITY
+    FROM
+        SPOTIFYDATA
+    ORDER BY
+        POPULARITY DESC
+    LIMIT 10
+);
 
---#10. What artist released the longest song?
-SELECT artist_name, 
-track_name, 
-duration_ms
-FROM BIT_DB.Spotifydata
-GROUP BY artist_name
-ORDER BY duration_ms desc
+-- 10. What artist released the longest song?
+SELECT
+    ARTIST_NAME,
+    TRACK_NAME,
+    DURATION_MS
+FROM
+    BIT_DB.SPOTIFYDATA
+GROUP BY
+    ARTIST_NAME
+ORDER BY
+    DURATION_MS DESC
 LIMIT 1;
 
---#11. Calculate the average popularity for the artists in the Spotify data table. 
+-- 11. Calculate the average popularity for the artists in the Spotify data table. 
 --Then, for every artist with an average popularity of 90 or above, show their name, their average popularity, and label them as a “Top Star”.
-WITH AVG_Popularity_CTE AS (
-    SELECT artist_name,
-    AVG(popularity) AS AVG_Popularity
-    FROM Spotifydata
-    GROUP BY artist_name)
-SELECT artist_name,
-AVG_popularity,
-'Top Star' AS tag
-FROM AVG_Popularity_CTE
-WHERE AVG_Popularity >= 90;
-
+WITH
+    AVG_POPULARITY_CTE AS (
+        SELECT
+            ARTIST_NAME,
+            AVG(POPULARITY) AS AVG_POPULARITY
+        FROM
+            SPOTIFYDATA
+        GROUP BY
+            ARTIST_NAME)
+SELECT
+    ARTIST_NAME,
+    AVG_POPULARITY,
+    'Top Star' AS TAG
+FROM
+    AVG_POPULARITY_CTE
+WHERE
+    AVG_POPULARITY >= 90;
 
 --Description of the data in each column:
 
