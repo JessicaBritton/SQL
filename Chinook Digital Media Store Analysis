@@ -2,185 +2,279 @@
 for artists, albums, media tracks, invoices, and customers(as well as a few others). 
 I am querying some questions that I had about this dataset. Below are the questions and it's SQL.*/
 
---#1. Show Customers (their full names, customer ID, and country) who are not in the US.
-SELECT CustomerId, 
-FirstName, 
-LastName, 
-Country
-FROM chinook.customers
-WHERE Country <> 'USA';
+-- 1. Show Customers (their full names, customer ID, and country) who are not in the US.
+SELECT
+    CUSTOMERID,
+    FIRSTNAME,
+    LASTNAME,
+    COUNTRY
+FROM
+    CHINOOK.CUSTOMERS
+WHERE
+    COUNTRY <> 'USA';
 
---#2. Show only the Customers from Brazil.
-SELECT * FROM chinook.customers
-WHERE Country = 'Brazil';
+-- 2. Show only the Customers from Brazil.
+SELECT
+    *
+FROM
+    CHINOOK.CUSTOMERS
+WHERE
+    COUNTRY = 'Brazil';
+    
+-- 3. Find the Invoices of customers who are from Brazil. The resulting table should show the customer's full name, Invoice ID, Date of the invoice, and billing country.
+SELECT
+    CUST.FIRSTNAME,
+    CUST.LASTNAME,
+    INV.INVOICEID,
+    INV.INVOICEDATE,
+    INV.BILLINGCOUNTRY
+FROM
+    CHINOOK.INVOICES AS INV
+LEFT JOIN
+    CHINOOK.CUSTOMERS AS CUST
+    ON INV.CUSTOMERID = CUST.CUSTOMERID
+WHERE
+    CUST.COUNTRY = 'Brazil';
 
---#3. Find the Invoices of customers who are from Brazil. The resulting table should show the customer's full name, Invoice ID, Date of the invoice, and billing country.
-SELECT cust.FirstName, 
-cust.LastName, 
-inv.InvoiceId, 
-inv.InvoiceDate, 
-inv.BillingCountry 
-FROM chinook.invoices inv
-LEFT JOIN chinook.customers cust
-ON inv.CustomerId = cust.CustomerId
-WHERE Country = 'Brazil';
+-- 4. Show the Employees who are Sales Agents.
+SELECT
+    *
+FROM
+    CHINOOK.EMPLOYEES AS EMP
+WHERE
+    EMP.TITLE = 'Sales Support Agent';
 
---#4. Show the Employees who are Sales Agents.
-SELECT * FROM chinook.employees
-WHERE Title = 'Sales Support Agent';
+-- 5. Find a unique/distinct list of billing countries from the Invoice table.
+SELECT
+    DISTINCT INV.BILLINGCOUNTRY
+FROM
+    CHINOOK.INVOICES AS INV
+ORDER BY
+    BILLINGCOUNTRY;
 
---#5. Find a unique/distinct list of billing countries from the Invoice table.
-SELECT distinct BillingCountry FROM chinook.invoices;
+-- 6. Provide a query that shows the invoices associated with each sales agent. The resulting table should include the Sales Agent's full name.
+SELECT
+    INV.INVOICEID,
+    EMP.FIRSTNAME,
+    EMP.LASTNAME
+FROM
+    CHINOOK.EMPLOYEES AS EMP
+JOIN
+    CHINOOK.CUSTOMERS AS CUST
+    ON EMP.EMPLOYEEID = CUST.SUPPORTREPID
+JOIN
+    CHINOOK.INVOICES AS INV
+    ON CUST.CUSTOMERID = INV.CUSTOMERID;
 
---#6. Provide a query that shows the invoices associated with each sales agent. The resulting table should include the Sales Agent's full name.
-SELECT inv.InvoiceId, 
-empl.FirstName, 
-empl.LastName
-FROM chinook.employees empl
-JOIN chinook.customers cust
-ON empl.EmployeeId = cust.SupportRepId
-JOIN chinook.invoices inv
-ON cust.CustomerId = inv.CustomerId;
+-- 7. Show the Invoice Total, Customer name, Country, and Sales Agent name for all invoices and customers.
+SELECT
+    INV.INVOICEID,    
+    INV.TOTAL,
+    CUST.FIRSTNAME AS CUST_FIRSTNAME,
+    CUST.LASTNAME AS CUST_LASTNAME,
+    CUST.COUNTRY AS CUST_COUNTRY,
+    EMP.FIRSTNAME AS REP_FIRSTNAME,
+    EMP.LASTNAME AS REP_LASTNAME
+FROM
+    CHINOOK.EMPLOYEES AS EMP
+JOIN
+    CHINOOK.CUSTOMERS AS CUST
+    ON EMP.EMPLOYEEID = CUST.SUPPORTREPID
+JOIN
+    CHINOOK.INVOICES AS INV
+    ON CUST.CUSTOMERID = INV.CUSTOMERID;
 
---#7. Show the Invoice Total, Customer name, Country, and Sales Agent name for all invoices and customers.
-SELECT inv.InvoiceId, 
-inv.Total, 
-cust.FirstName AS Cust_FirstName, 
-cust.LastName AS Cust_LastName, 
-cust.Country AS Cust_Country, 
-empl.FirstName AS Rep_FirstName, 
-empl.LastName AS Rep_LastName
-FROM chinook.employees empl
-JOIN chinook.customers cust
-ON empl.EmployeeId = cust.SupportRepId
-JOIN chinook.invoices inv
-ON cust.CustomerId = inv.CustomerId;
 
---#8. How many Invoices were there in 2009?
-SELECT COUNT(*) AS Total_Invoices
-FROM chinook.invoices
-WHERE InvoiceDate LIKE '2009%';
+-- 8. How many Invoices were there in 2009?
+SELECT
+    COUNT(*) AS TOTAL_2009_INVOICES
+FROM
+    CHINOOK.INVOICES AS INV
+WHERE
+    INV.INVOICEDATE LIKE '2009%';
 
 --or use between
 
-SELECT COUNT(*)
-FROM chinook.Invoices
-WHERE InvoiceDate BETWEEN '2009-01-01' AND '2009-12-31';
+SELECT 
+    COUNT(*) AS TOTAL_2009_INVOICES
+FROM
+    CHINOOK.INVOICES AS INV
+WHERE
+    INV.INVOICEDATE BETWEEN '2009-01-01' AND '2009-12-31';
 
---#9. What are the total sales for 2009?
-SELECT SUM(total) AS '2009_Revenue'
-FROM chinook.invoices
-WHERE InvoiceDate LIKE '2009%';
+-- 9. What are the total sales for 2009?
+SELECT
+    SUM(INV.TOTAL) AS TOTAL_2009_REVENUE
+FROM
+    CHINOOK.INVOICES AS INV
+WHERE
+    INV.INVOICEDATE LIKE '2009%';
 
 --or use between
 
-SELECT SUM(Total)
-FROM chinook.Invoices
-WHERE InvoiceDate BETWEEN '2009-01-01' AND '2009-12-31';
+SELECT 
+    SUM(INV.TOTAL) AS TOTAL_2009_REVENUE
+FROM
+    CHINOOK.INVOICES AS INV
+WHERE
+    INV.INVOICEDATE BETWEEN '2009-01-01' AND '2009-12-31';
 
---#10. Write a query that includes the purchased track name with each invoice line ID.
-SELECT track.name, 
-InvoiceLineId
-FROM chinook.invoice_items InvItm
-JOIN chinook.tracks track
-ON InvItm.TrackId = track.TrackId;
+-- 10. Write a query that includes the purchased track name with each invoice line ID.
+SELECT
+    TRACKS.NAME,
+    INVITM.INVOICELINEID
+FROM
+    CHINOOK.INVOICE_ITEMS AS INVITM
+JOIN
+    CHINOOK.TRACKS AS TRACKS
+    ON INVITM.TRACKID = TRACKS.TRACKID;
 
---#11. Write a query that includes the purchased track name AND artist name with each invoice line ID.
-SELECT art.name AS 'Artist Name', 
-track.name AS 'Track Name', 
-InvoiceLineId
-FROM chinook.invoice_items InvItm
-JOIN chinook.tracks track
-ON InvItm.TrackId = track.TrackId
-JOIN chinook.albums alb
-ON track.AlbumId = alb.AlbumId
-JOIN chinook.artists art
-ON alb.ArtistId = art.ArtistId;
 
---#12. Provide a query that shows all the Tracks, and include the Album name, Media type, and Genre.
-SELECT track.name AS 'Track Name', 
-alb.Title AS 'Album Title', 
-med.Name AS 'Media Type', 
-gen.Name AS 'Genre'
-FROM chinook.tracks track
-JOIN chinook.albums alb
-ON track.AlbumId = alb.AlbumId
-JOIN chinook.media_types med
-ON track.MediaTypeId = med.MediaTypeId
-JOIN chinook.genres gen
-ON track.GenreId = gen.GenreId;
+-- 11. Write a query that includes the purchased track name AND artist name with each invoice line ID.
+SELECT
+    ART.NAME AS ARTIST_NAME,
+    TRACKS.NAME AS TRACK_NAME,
+    INVITM.INVOICELINEID
+FROM
+    CHINOOK.INVOICE_ITEMS AS INVITM
+JOIN
+    CHINOOK.TRACKS AS TRACKS
+    ON INVITM.TRACKID = TRACKS.TRACKID
+JOIN
+    CHINOOK.ALBUMS AS ALB
+    ON TRACKS.ALBUMID = ALB.ALBUMID
+JOIN
+    CHINOOK.ARTISTS AS ART
+    ON ALB.ARTISTID = ART.ARTISTID;
 
---#13. Show the total sales made by each sales agent.
-SELECT empl.FirstName, 
-empl.LastName, 
-ROUND(SUM(inv.total), 2) As 'Total Sales'
-FROM chinook.invoices inv
-JOIN chinook.customers cust
-ON inv.CustomerId = cust.CustomerId
-JOIN chinook.employees empl
-ON cust.SupportRepId = empl.EmployeeId
-WHERE empl.Title = 'Sales Support Agent'
-GROUP BY EmployeeID;
+-- 12. Provide a query that shows all the Tracks, and include the Album name, Media type, and Genre.
+SELECT
+    TRACKS.NAME AS TRACK_NAME,
+    ALB.TITLE AS ALBUM_NAME,
+    MED.NAME AS MEDIA_TYPE,
+    GEN.NAME AS GENRE
+FROM
+    CHINOOK.TRACKS AS TRACKS
+JOIN
+    CHINOOK.ALBUMS AS ALB
+    ON TRACKS.ALBUMID = ALB.ALBUMID
+JOIN
+    CHINOOK.MEDIA_TYPES AS MED
+    ON TRACKS.MEDIATYPEID = MED.MEDIATYPEID
+JOIN
+    CHINOOK.GENRES AS GEN
+    ON TRACKS.GENREID = GEN.GENREID;
 
---#14. Which sales agent made the most dollars in sales in 2009?
-SELECT empl.FirstName, 
-empl.LastName, 
-ROUND(SUM(inv.total), 2) As 'Total Sales'
-FROM chinook.invoices inv
-JOIN chinook.customers cust
-ON inv.CustomerId = cust.CustomerId
-JOIN chinook.employees empl
-ON cust.SupportRepId = empl.EmployeeId
-WHERE empl.Title = 'Sales Support Agent'
-AND inv.InvoiceDate LIKE '2009%'
-GROUP BY EmployeeID
-ORDER BY ROUND(SUM(inv.total), 2) desc
+-- 13. Show the total sales made by each sales agent.
+SELECT
+    EMP.FIRSTNAME,
+    EMP.LASTNAME,
+    ROUND(SUM(INV.TOTAL), 2) AS TOTAL_SALES
+FROM
+    CHINOOK.INVOICES AS INV
+JOIN
+    CHINOOK.CUSTOMERS AS CUST
+    ON INV.CUSTOMERID = CUST.CUSTOMERID
+JOIN
+    CHINOOK.EMPLOYEES AS EMP
+    ON CUST.SUPPORTREPID = EMP.EMPLOYEEID
+WHERE
+    EMP.TITLE = 'Sales Support Agent'
+GROUP BY
+    EMP.EMPLOYEEID;
+
+-- 14. Which sales agent made the most dollars in sales in 2009?
+SELECT
+    EMP.FIRSTNAME,
+    EMP.LASTNAME,
+    SUM(INV.TOTAL) AS TOTAL_2009_SALES
+FROM
+    CHINOOK.EMPLOYEES AS EMP
+JOIN 
+    CHINOOK.CUSTOMERS AS CUST
+    ON EMP.EMPLOYEEID = CUST.SUPPORTREPID
+JOIN
+    CHINOOK.INVOICES AS INV
+    ON CUST.CUSTOMERID = INV.CUSTOMERID
+WHERE
+    EMP.TITLE = 'Sales Support Agent'
+    AND INV.INVOICEDATE LIKE '2009%'
+GROUP BY
+    EMP.EMPLOYEEID
+ORDER BY
+    TOTAL_2009_SALES DESC
 LIMIT 1;
 
---#15. Show all the customers whose support representative is Jane Peacock. Include customer full name, country, and email.
- SELECT cust.FirstName, 
- cust.LastName, 
- cust.Country, 
- cust.Email
- FROM chinook.customers cust
- LEFT JOIN chinook.employees empl
- ON cust.SupportRepId = empl.EmployeeId
- WHERE EmployeeId = 3;
- 
---#16. Provide the invoices whose Billing Country is from France and it's total is above 5.00.
-SELECT * FROM chinook.invoices
-WHERE BillingCountry = 'France'
-AND Total > 5.00;
+-- 15. Show all the customers whose support representative is Jane Peacock. Include customer full name, country, and email.
+SELECT
+    CUST.FIRSTNAME AS CUST_FIRSTNAME,
+    CUST.LASTNAME AS CUST_LASTNAME,
+    CUST.COUNTRY,
+    CUST.EMAIL
+FROM
+    CHINOOK.CUSTOMERS AS CUST
+JOIN
+    CHINOOK.EMPLOYEES AS EMP
+    ON CUST.SUPPORTREPID = EMP.EMPLOYEEID
+WHERE
+    EMP.EMPLOYEEID = 3;
 
---#17. What are the different Media Types?
-SELECT distinct name
-FROM chinook.media_types;
+-- 16. Provide the invoices whose Billing Country is from France and it's total is above 5.00.
+SELECT
+    *
+FROM
+    CHINOOK.INVOICES
+WHERE
+    BILLINGCOUNTRY = 'France'
+    AND TOTAL > 5.00;
 
---#18.  Find a unique/distinct list of artists from the artists table.
-SELECT distinct name FROM chinook.artists;
+-- 17. What are the different Media Types?
+SELECT
+    DISTINCT NAME
+FROM
+    CHINOOK.MEDIA_TYPES;
 
---#19. How many albums does AC/DC have?
-SELECT art.Name AS 'Artist Name', 
-COUNT(alb.Title) AS 'NumberOf_Albums'
-FROM chinook.artists art
-JOIN chinook.albums alb
-ON art.ArtistId = alb.ArtistId
-WHERE art.Name = 'AC/DC';
+-- 18.  Find a unique/distinct list of artists from the artists table.
+SELECT
+    DISTINCT NAME
+FROM
+    CHINOOK.ARTISTS;
 
---#20. Who are the top 5 artists with the most albums?
-SELECT art.Name AS 'Artist Name', 
-COUNT(alb.Title) AS 'NumberOf_Albums'
-FROM chinook.artists art
-JOIN chinook.albums alb
-ON art.ArtistId = alb.ArtistId
-GROUP BY art.Name
-ORDER BY NumberOf_Albums desc
+-- 19. How many albums does AC/DC have?
+SELECT
+    ART.NAME AS ARTIST_NAME,
+    COUNT(ALB.TITLE) AS NUMBER_OF_ALBUMS
+FROM
+    CHINOOK.ARTISTS AS ART
+JOIN
+    CHINOOK.ALBUMS AS ALB
+    ON ART.ARTISTID = ALB.ARTISTID
+WHERE 
+    ART.NAME = 'AC/DC';
+
+-- 20. Who are the top 5 artists with the most albums?
+SELECT
+    ART.NAME AS ARTIST_NAME,
+    COUNT(ALB.TITLE) AS NUMBER_OF_ALBUMS
+FROM
+    CHINOOK.ARTISTS AS ART
+JOIN
+    CHINOOK.ALBUMS AS ALB
+    ON ART.ARTISTID = ALB.ARTISTID
+GROUP BY
+    ART.NAME
+ORDER BY
+    NUMBER_OF_ALBUMS DESC
 LIMIT 5;
 
---#21. What are the names of AC/DC's albums?
-SELECT art.Name AS 'Artist Name', 
-alb.Title
-FROM chinook.artists art
-JOIN chinook.albums alb
-ON art.ArtistId = alb.ArtistId
-WHERE art.Name = 'AC/DC';
+-- 21. What are the names of AC/DC's albums?
+SELECT   
+    ART.NAME AS ARTIST_NAME,
+    ALB.TITLE AS ALBUM_TITLE
+FROM
+    CHINOOK.ARTISTS AS ART
+JOIN
+    CHINOOK.ALBUMS AS ALB
+    ON ART.ARTISTID = ALB.ARTISTID
+WHERE
+    ART.NAME = 'AC/DC';
