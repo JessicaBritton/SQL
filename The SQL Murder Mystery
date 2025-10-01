@@ -1,0 +1,178 @@
+--The SQL Murder Mystery
+--In the below queries I am using SQL to solve a murder. Here is the link to the Murder Mystery online game: https://mystery.knightlab.com/
+--This is the information I am given to start off the mystery: 
+    --A crime has taken place and the detective needs your help. The detective gave you the crime scene report, but you somehow lost it. 
+    --You vaguely remember that the crime was a ​murder​ that occurred sometime on ​Jan.15, 2018​ and that it took place in ​SQL City​. 
+    --Start by retrieving the corresponding crime scene report from the police department’s database.
+
+-- 1. Retrieving the crime scene report from the police department's database based off the above information.
+SELECT
+    *
+FROM
+    CRIME_SCENE_REPORT
+WHERE
+    DATE = '20180115'
+    AND TYPE = 'murder'
+    AND CITY = 'SQL City';
+
+--The above query gave this description:
+    --Security footage shows that there were 2 witnesses. The first witness lives at the last house on "Northwestern Dr". The second witness, named Annabel, lives somewhere on "Franklin Ave".
+
+-- 2. From the above description, I am starting with the first witness. The below query is pulling the persons id, name, license_id, address_number, address_street_name, and SSN.
+    --I am filtering by Northwestern Dr and ordering it by address_number descending as we know the first witness lives in the last house on that street.  
+SELECT
+    *
+FROM
+    PERSON
+WHERE
+    ADDRESS_STREET_NAME LIKE 'Northwestern Dr'
+ORDER BY
+    ADDRESS_NUMBER DESC
+
+--I now know that it is Marty Schapiro.
+
+-- 3. Since I know the name and his Id number, I am going to pull his police interview.
+SELECT
+    *
+FROM
+    INTERVIEW AS I
+JOIN
+    PERSON AS P
+    ON I.PERSON_ID = P.ID
+WHERE
+    P.NAME = 'Marty Schapiro'
+    OR P.ID = 14887
+
+--This is his transcript:
+    --"I heard a gunshot and then saw a man run out. He had a "Get Fit Now Gym" bag. The membership number on the bag started with "48Z". Only gold members have those bags. The man got into a car with a plate that included "H42W"".
+
+-- 4. Now I want to run a query that uses the above information from Marty's interview to find out the name of the person whose membership number starts with "48Z", and their license plate number includes "H42W".
+SELECT
+    P.NAME,
+    M.ID,
+    DL.PLATE_NUMBER
+FROM
+    PERSON AS P
+JOIN
+    GET_FIT_NOW_MEMBER AS M
+    ON P.ID = M.PERSON_ID
+JOIN
+    DRIVERS_LICENSE AS DL
+    ON P.LICENSE_ID = DL.ID
+WHERE
+    M.ID LIKE '48Z%'
+    AND M.MEMBERSHIP_STATUS = 'gold'
+    AND DL.PLATE_NUMBER LIKE '%H42W%'
+ 
+--The above query gave this name:
+    --Jeremy Bowers, ID 48Z55 (MEM ID), PLATE # 0H42W2
+    
+-- 5. I could run Jeremy's interview now as I believe he is the suspect, but I want to double check this information based on our second witness's interview.
+    --Based off of the original description, we know that "The second witness, named Annabel, lives somewhere on "Franklin Ave"".
+    --The below query is pulling the persons id, name, license_id, address_number, address_street_name, and SSN.
+    --I am filtering by Franklin Ave and the name Annabel as I am given that information.
+SELECT
+    *
+FROM
+    PERSON
+WHERE
+    ADDRESS_STREET_NAME LIKE 'Franklin Ave'
+    AND NAME LIKE 'Annabel%';
+
+--I now know that it is Annabel Miller.
+
+-- 6. Since I know the name and her Id number, I am going to pull her police interview.
+SELECT
+    *
+FROM
+    INTERVIEW AS I
+JOIN
+    PERSON AS P
+    ON I.PERSON_ID = P.ID
+WHERE
+    P.NAME = 'Annabel Miller'
+    OR P.ID = 16371
+
+--This is her transcript:
+    --"I saw the murder happen, and I recognized the killer from my gym when I was working out last week on January the 9th."
+
+-- 7. Now I want to run a query that uses the above information from Annabel's interview to find out the names of the individuals who were working out on January 9th.
+SELECT
+    M.ID,
+    M.NAME,
+    M.MEMBERSHIP_STATUS,
+    CI.CHECK_IN_DATE,
+    CI.CHECK_IN_TIME,
+    CI.CHECK_OUT_TIME
+FROM
+    GET_FIT_NOW_CHECK_IN AS CI
+JOIN
+    GET_FIT_NOW_MEMBER AS M
+    ON CI.MEMBERSHIP_ID = M.ID
+WHERE
+    CHECK_IN_DATE = '20180109'
+
+--This query pulls results of all individuals who worked out on that date and Jeremy Bowers is one of them.
+
+-- 8. Since I know the name and his Id number, I am going to pull his police interview.
+SELECT
+    *
+FROM
+    INTERVIEW AS I
+JOIN
+    PERSON AS P
+    ON I.PERSON_ID = P.ID
+WHERE
+    P.NAME = 'Jeremy Bowers'
+    
+--This is his transcript:
+    --"I was hired by a woman with a lot of money. I don't know her name but I know she's around 5'5" (65") or 5'7" (67"). She has red hair and she drives a Tesla Model S. I know that she attended the SQL Symphony Concert 3 times in December 2017."
+
+-- 9. I am entering Jeremy's name into the below query to check my solution and find out if I am correct on who the killer was:
+INSERT INTO solution VALUES (1, 'Jeremy Bowers');
+        SELECT value FROM solution;
+
+--It returned this value:
+    --"Congrats, you found the murderer! But wait, there's more... 
+    --If you think you're up for a challenge, try querying the interview transcript of the murderer to find the real villain behind this crime. 
+    --If you feel especially confident in your SQL skills, try to complete this final step with no more than 2 queries. 
+    --Use this same INSERT statement with your new suspect to check your answer."
+
+-- 10. This query was used to identify how the filters in the next query needed to be listed in the 'where' statement.
+SELECT
+    *
+FROM
+    DRIVERS_LICENSE
+WHERE
+    CAR_MAKE = 'Tesla'
+
+-- 11. The below query is using Jeremy's interview to filter the drivers license table and the facebook event check in table based on Jeremy's description of the master mind.
+SELECT
+    DL.*,
+    P.NAME,
+    FB.EVENT_NAME,
+    FB.DATE
+FROM
+    DRIVERS_LICENSE AS DL
+JOIN
+    PERSON AS P
+    ON DL.ID = P.LICENSE_ID
+JOIN
+    FACEBOOK_EVENT_CHECKIN AS FB
+    ON P.ID = FB.PERSON_ID
+WHERE
+    DL.GENDER = 'female'
+    AND DL.HEIGHT BETWEEN 65 AND 67
+    AND DL.HAIR_COLOR = 'red'
+    AND DL.CAR_MAKE = 'Tesla'
+    AND DL.CAR_MODEL = 'Model S'
+    AND FB.EVENT_NAME LIKE 'SQL Symphony Concert'
+    AND FB.DATE LIKE '201712%'
+ 
+--There were three rows of data returned. It displayed the persons name that attended the three concert events and matched all the filters. Her name is Miranda Priestly.
+--I inserted her name into the below query to find out if I am correct:
+INSERT INTO solution VALUES (1, 'Miranda Priestly');
+        SELECT value FROM solution;
+        
+--IT RETURNED THIS VALUE: 
+    --"Congrats, you found the brains behind the murder! Everyone in SQL City hails you as the greatest SQL detective of all time. Time to break out the champagne!"
