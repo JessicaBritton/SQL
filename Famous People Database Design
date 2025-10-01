@@ -75,21 +75,44 @@ INSERT INTO Movie_Love_Interest (movie_id, actor1_id, actor2_id)
 INSERT INTO Movie_Love_Interest (movie_id, actor1_id, actor2_id)
     VALUES (19, 17, 7);
 
-SELECT * FROM Famous_People;
+--ANALYSIS:
 
-SELECT * FROM Movies;
+--1. In the two queries below I am seecting all the data from 'Famous People' and 'Movies'.
+SELECT 
+    * 
+FROM 
+    FAMOUS_PEOPLE;
 
-SELECT Famous_People.fullname AS actor, Movies.title AS movie_title
-FROM Famous_People
-    JOIN Movies
-    ON Famous_People.id = Movies.actor_id;
+SELECT 
+    * 
+FROM 
+    MOVIES;
 
-SELECT a.fullname AS love_interest_a, b.fullname AS love_interest_b, movies.title AS movie_title
-FROM Movie_Love_Interest
-    JOIN Famous_People a
-    ON Movie_Love_Interest.actor1_id = a.id
-    JOIN Famous_People b
-    ON Movie_Love_Interest.actor2_id = b.id
-    JOIN Movies
-    ON Movie_Love_Interest.actor1_id = Movies.actor_id
-    GROUP By a.id;
+--2. What movies have each actor appeared in?
+SELECT 
+    FAMOUS_PEOPLE.FULLNAME AS ACTOR,
+    MOVIES.TITLE AS MOVIE_TITLE
+FROM 
+    FAMOUS_PEOPLE
+JOIN 
+    MOVIES
+    ON FAMOUS_PEOPLE.ID = MOVIES.ACTOR_ID;
+
+--3. Display the movie title and the two actors who are the 'love interest' in the movie.
+SELECT 
+    A.FULLNAME AS LOVE_INTEREST_A, 
+    B.FULLNAME AS LOVE_INTEREST_B,
+    MOVIES.TITLE AS MOVIE_TITLE
+FROM 
+    MOVIE_LOVE_INTEREST
+JOIN 
+    FAMOUS_PEOPLE AS A
+    ON MOVIE_LOVE_INTEREST.ACTOR1_ID = A.ID
+JOIN 
+    FAMOUS_PEOPLE AS B
+    ON MOVIE_LOVE_INTEREST.ACTOR2_ID = B.ID
+JOIN 
+    MOVIES
+    ON MOVIE_LOVE_INTEREST.ACTOR1_ID = MOVIES.ACTOR_ID
+GROUP BY
+    A.ID;
