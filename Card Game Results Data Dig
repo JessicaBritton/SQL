@@ -1,65 +1,118 @@
 #In this SQL code, I'm querying a database that's holding card game results to answer questions about the data. Database below.
 
 --#1. Who are all the players and how many times have they played? 
-SELECT player_name, COUNT(player_name) AS 'Times_Played' 
-FROM card_games 
-GROUP BY player_name;
+SELECT 
+    PLAYER_NAME,
+    COUNT(PLAYER_NAME) AS 'Times_Played' 
+FROM 
+    CARD_GAMES 
+GROUP BY 
+    PLAYER_NAME;
 
 --#2. Which players have played over 13 times?
-SELECT player_name, COUNT(*) AS 'Times_Played' 
-FROM card_games 
-GROUP BY player_name 
-HAVING COUNT(*) >= 13; 
+SELECT 
+    PLAYER_NAME,
+    COUNT(*) AS 'Times_Played' 
+FROM 
+    CARD_GAMES 
+GROUP BY 
+    PLAYER_NAME 
+HAVING 
+    COUNT(*) >= 13; 
 
 --#3. How many times were each game played?
-SELECT game_name, COUNT(*)
-FROM card_games
-GROUP BY game_name;
+SELECT 
+    GAME_NAME,
+    COUNT(*)
+FROM 
+    CARD_GAMES
+GROUP BY 
+    GAME_NAME;
 
 --#4. What are average, max, and min score values in the data?
-SELECT MAX(score) AS 'Max_Score' FROM card_games;
+SELECT 
+    MAX(SCORE) AS 'Max_Score'
+FROM 
+    CARD_GAMES;
 
-SELECT MIN(score) AS 'Min_Score' FROM card_games;
+SELECT 
+    MIN(SCORE) AS 'Min_Score' 
+FROM 
+    CARD_GAMES;
 
-SELECT AVG(score) AS 'AVG_Score' FROM card_games;
+SELECT 
+    AVG(SCORE) AS 'AVG_Score' 
+FROM 
+    CARD_GAMES;
 
 --#5. What are average, max, and min score values in the data by game?
-SELECT game_name, MAX(score) AS 'Max_Score'
-FROM card_games
-GROUP BY game_name;
+SELECT 
+    GAME_NAME,
+    MAX(SCORE) AS 'Max_Score'
+FROM 
+    CARD_GAMES
+GROUP BY 
+    GAME_NAME;
 
-SELECT game_name, MIN(score) AS 'Min_Score'
-FROM card_games
-GROUP BY game_name;
+SELECT 
+    GAME_NAME,,
+    MIN(SCORE) AS 'Min_Score'
+FROM 
+    CARD_GAMES
+GROUP BY 
+    GAME_NAME;
 
-SELECT game_name, ROUND(AVG(score)) AS 'AVG_Score'
-FROM card_games
-GROUP BY game_name;
+SELECT 
+    GAME_NAME,
+    ROUND(AVG(SCORE)) AS 'AVG_Score'
+FROM 
+    CARD_GAMES
+GROUP BY 
+    GAME_NAME;
 
 --#6. Which Players got the highest/max Score in each game?
-SELECT game_name, player_name, MAX(score) AS 'Max_Score'
-FROM card_games
-GROUP BY game_name
-HAVING 'Max_Score'='Max_Score';
+SELECT 
+    GAME_NAME,
+    PLAYER_NAME,
+    MAX(SCORE) AS 'Max_Score'
+FROM 
+    CARD_GAMES
+GROUP BY 
+    GAME_NAME
+HAVING 
+    'Max_Score'='Max_Score';
 
 --#7. Which players had a score above average in Rummy?
-SELECT game_name, player_name, score
-FROM card_games
-WHERE game_name = 'Rummy' AND score > 413
-GROUP BY player_name
-ORDER BY score desc;
+SELECT 
+    GAME_NAME,
+    PLAYER_NAME,
+    SCORE
+FROM 
+    CARD_GAMES
+WHERE 
+    GAME_NAME = 'Rummy'
+AND
+    SCORE > 413
+GROUP BY 
+    PLAYER_NAME
+ORDER BY 
+    SCORE DESC;
 
 --#8. How many scores were high, average, low, and poor in Rummy? (using CASE)
-SELECT COUNT(*),
+SELECT 
+    COUNT(*),
     CASE
-        WHEN score > 520 THEN 'High Score'
-        WHEN score > 400 THEN 'Average Score'
-        WHEN score > 300 THEN 'Low Score'
+        WHEN SCORE > 520 THEN 'High Score'
+        WHEN SCORE > 400 THEN 'Average Score'
+        WHEN SCORE > 300 THEN 'Low Score'
         ELSE 'Poor Score'
     END AS "Game_Scoring"
-FROM card_games
-WHERE game_name ='Rummy'
-GROUP BY "Game_Scoring";
+FROM 
+    CARD_GAMES
+WHERE 
+    GAME_NAME ='Rummy'
+GROUP BY 
+    "Game_Scoring";
 
 --Below in the description on the data, the table creation, and the data itself. 
 /*  Friendly Card Game Results:
